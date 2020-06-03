@@ -174,7 +174,7 @@ function SetTitleForH()
     " 比如 xxx_yyy.h，对应的 if-guard 宏是 XXX_YYY_H，如果要加上项目名特定前缀，
     " 比如项目 xyz 的每个头文件宏都是以 XYZ_ 作为开头，修改下面的 prefix 变量
     let prefix = ""
-    let name = toupper(base.expand("%"))
+    let name = toupper(prefix.expand("%"))
     let name = join(split(name, '\.'), '_')
     let name = join(split(name, '-'), '_')
     call setline(1, join(['#ifndef', name]))
