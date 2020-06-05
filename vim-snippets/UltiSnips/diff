@@ -1,0 +1,27 @@
+38,43c38,42
+< class ${1:`!p snip.rv = snip.basename or "name"`} {
+<  public:
+<   ${1/(\w+).*/$1/}();
+<   ${1/(\w+).*/$1/}(const ${1/(\w+).*/$1/}& rhs);
+<   ${1/(\w+).*/$1/}(${1/(\w+).*/$1/}&& rhs) noexcept;
+<   virtual ~${1/(\w+).*/$1/} ();
+---
+> class ${1:`!p snip.rv = snip.basename or "name"`}
+> {
+> public:
+> 	${1/(\w+).*/$1/} (${2:arguments});
+> 	virtual ~${1/(\w+).*/$1/} ();
+45c44,45
+<  private:
+---
+> private:
+> 	${0:/* data */}
+50,52c50,53
+< namespace${1/.+/ /m}${1:`!p snip.rv = snip.basename or "name"`} {
+<   ${VISUAL}$0
+< }${1/.+/ \/\/ /m}$1${1/.+//m}
+---
+> namespace${1/.+/ /m}${1:`!p snip.rv = snip.basename or "name"`}
+> {
+> 	${VISUAL}$0
+> }${1/.+/ \/* /m}$1${1/.+/ *\/ /m}
