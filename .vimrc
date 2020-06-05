@@ -4,9 +4,28 @@ set number
 let mapleader=";"
 
 call plug#begin('~/.vim/plugged')
+" 基于语义的代码补全和跳转(还不完善)
 Plug 'ycm-core/YouCompleteMe'
+" 树形浏览器
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" 静态语法检查
 Plug 'dense-analysis/ale'
+" 在页面上显示 git diff 的结果，类似 github 的效果
+Plug 'mhinz/vim-signify'
+" AsyncRun 执行异步任务
+Plug 'skywind3000/asyncrun.vim'
+" 代码块自动生成
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+" 美化状态栏
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" monokai 主题
+Plug 'sickill/vim-monokai'
+" C/C++ 头文件和源文件互相跳转，命令模式下使用 A / AS / AV 即可
+Plug 'vim-scripts/a.vim'
+" markdown 高亮
+Plug 'plasticboy/vim-markdown'
 call plug#end()
 
 "" YCM配置
@@ -69,6 +88,53 @@ let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++11'
 let g:ale_c_cppcheck_options = ''
 let g:ale_cpp_cppcheck_options = ''
 
+"" vim-signify
+set signcolumn=yes  " 强制显示侧边栏，防止时有时无
+
+"" async-run
+" 自动打开 quickfix window ，高度为 6
+let g:asyncrun_open = 6
+" 设置 F10 打开/关闭 Quickfix 窗口
+nnoremap <F10> :call asyncrun#quickfix_toggle(6)<cr>
+" 递归查找包含该目录的目录作为根目录，若找不到则将文件所在目录作为当前目录
+let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '_darcs', 'build.xml'] 
+" 设置 F7 运行 make 编译当前项目
+nnoremap <silent> <F7> :AsyncRun -cwd=<root> make <cr>
+" F5编译运行当前程序
+map <F5> :call RunProgram()<CR>
+func! RunProgram()
+    exec "w"
+    if &filetype == 'go'
+        exec "!go run %"
+    elseif &filetype == 'cpp'
+        exec "AsyncRun g++ -std=c++11 -Wall \"$(VIM_FILEPATH)\" && ./a.out"
+    elseif &filetype == 'c'
+        exec "AsyncRun gcc -std=c99 -Wall \"$(VIM_FILEPATH)\" && ./a.out"
+    elseif index(['python', 'ruby', 'sh'], &filetype) >= 0
+        exec "AsyncRun chmod u+x % && ./%"
+    endif
+endfunc
+
+"" ultisnips
+" Do not use <tab> if you use YouCompleteMe
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+"" vim-airline
+let laststatus = 2
+let g:airline_powerline_fonts = 1
+let g:airline_theme = "dark"
+let g:airline#extensions#tabline#enabled = 1
+
+"" vim-monokai
+colorscheme monokai
+
+"" vim-markdown
+" Github风格markdown语法
+let g:vim_markdown_no_extensions_in_markdown = 1
 
 "" --------------------------------------------------
 "" 下列配置均为插件无关的代码，放到最末尾
