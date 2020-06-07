@@ -6,6 +6,8 @@ let mapleader=";"
 call plug#begin('~/.vim/plugged')
 " 基于语义的代码补全和跳转(还不完善)
 Plug 'ycm-core/YouCompleteMe'
+" 文件/方法查找
+Plug 'Yggdroot/LeaderF'
 " 树形浏览器
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " 静态语法检查
@@ -62,6 +64,30 @@ let g:ycm_show_diagnostics_ui = 0  " 禁用YCM自带语法检查(使用ale)
 " 防止YCM和Ultisnips的TAB键冲突，禁止YCM的TAB
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+
+"" LeaderF
+" Ctrl+P在当前项目目录打开文件搜索, Ctrl+N打开MRU搜索，搜索最近打开的文件
+" Alt+P打开函数搜索，Alt+N打开Buffer搜索
+let g:Lf_ShortcutF = '<c-p>'
+let g:Lf_ShortcutB = '<m-n>'
+" Ctrl+F 使用正则模糊匹配查找函数，按 Ctrl+K/J 上下移动，按 TAB
+" 后查找窗口会变成普通模式，直接 K/J 或者方向键即可上下移动
+noremap <c-f> :LeaderfFunction<cr>
+" Ctrl+P 使用正则模糊匹配查找文件
+noremap <c-n> :LeaderfMru<cr>
+noremap <m-p> :LeaderfFunction!<cr>
+noremap <m-n> :LeaderfBuffer<cr>
+noremap <m-m> :LeaderfTag<cr>
+let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
+
+let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
+let g:Lf_WorkingDirectoryMode = 'Ac'
+let g:Lf_WindowHeight = 0.30
+let g:Lf_CacheDirectory = expand('~/.vim/cache')
+let g:Lf_ShowRelativePath = 0
+let g:Lf_HideHelp = 1
+let g:Lf_StlColorscheme = 'powerline'
+let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
 
 "" nerdtree
 nmap <Leader><Leader> :NERDTreeToggle<CR>
