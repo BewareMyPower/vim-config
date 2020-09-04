@@ -141,6 +141,15 @@ func! RunProgram()
     endif
 endfunc
 
+" rhysd/vim-clang-format 有时候会特别卡，这里自己简单包装 clang-format 命令
+map <F12> :call ClangFormatMySelf()<CR>
+func! ClangFormatMySelf()
+    exec "w"
+    exec "AsyncRun clang-format -i %"
+    exec "e"
+    exec "call asyncrun#quickfix_toggle(6)"
+endfunc
+
 "" ultisnips
 " Do not use <tab> if you use YouCompleteMe
 let g:UltiSnipsExpandTrigger="<tab>"
